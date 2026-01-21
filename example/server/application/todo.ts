@@ -33,13 +33,12 @@ export const createTodoWorkflow =
     const desc = TodoDescription.create(input.description);
     const prio = Priority.create(input.priority);
 
-    const errs = [
-      !title.ok ? { field: "title", message: title.error } : [],
-      !desc.ok ? { field: "description", message: desc.error } : [],
-      !prio.ok ? { field: "priority", message: prio.error } : [],
-    ].flat();
-
-    if (errs.length) {
+    if (!title.ok || !desc.ok || !prio.ok) {
+      const errs = [
+        !title.ok ? { field: "title", message: title.error } : [],
+        !desc.ok ? { field: "description", message: desc.error } : [],
+        !prio.ok ? { field: "priority", message: prio.error } : [],
+      ].flat();
       return Eff.fail<WorkflowError>({
         type: "Validation",
         message: "Validation failed",
