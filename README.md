@@ -61,3 +61,23 @@ AI エージェント（Claude Code など）に対して以下のように指�
 ```
 
 `AGENTS.md` にプロジェクトのルールや設計原則が記載されているため、AI はそれを参照しながら実装を進めます。
+
+例えば、以下のような型安全なコードを AI に実装させることができます。
+
+```typescript
+function handleComplete(todo: Todo): void {
+  switch (todo.status) {
+    case "Active":
+      todos.complete(todo);
+      break;
+    case "Completed":
+    case "Archived":
+      console.warn(`Cannot complete todo: expected Active status, got ${todo.status}`);
+      break;
+    default:
+      assertNever(todo);
+  }
+}
+```
+
+`assertNever` による網羅性チェックにより、将来新しいステータスが追加された場合にコンパイルエラーで検出できます。
